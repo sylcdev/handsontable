@@ -406,7 +406,14 @@ export default function Core(rootElement, userSettings, rootInstanceSymbol = fal
               // TODO: for datamap.removeRow index should be passed as it is (with undefined and null values). If not, the logic
               // inside the datamap.removeRow breaks the removing functionality.
               datamap.removeRow(groupIndex, groupAmount, source);
-              priv.cellSettings.splice(calcIndex, amount);
+
+              // 'cellSettings' are stored in original physical order.
+              for (let rowOffset = amount - 1; rowOffset >= 0; rowOffset--) {
+                const cellSetting = priv.cellSettings.filter(cs => cs[0].visualRow === calcIndex + rowOffset);
+                if (cellSetting.length > 0) {
+                  priv.cellSettings.splice(cellSetting[0][0].row, 1);
+                }
+              }
 
               const totalRows = instance.countRows();
               const fixedRowsTop = instance.getSettings().fixedRowsTop;

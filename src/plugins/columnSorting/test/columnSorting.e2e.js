@@ -2602,6 +2602,106 @@ describe('ColumnSorting', () => {
     });
   });
 
+  describe('cell metadata', () => {
+    it('should correctly be removed when a sorted row is removed', () => {
+      handsontable({
+        data: [
+          ['c1'],
+          ['a1'],
+          ['b1']
+        ],
+        columnSorting: true
+      });
+
+      getCellMeta(0, 0).someValue = [0, 0];
+      getCellMeta(1, 0).someValue = [1, 0];
+      getCellMeta(2, 0).someValue = [2, 0];
+
+      getPlugin('columnSorting').sort({ column: 0, sortOrder: 'asc' });
+
+      alter('remove_row', 0);
+
+      expect(getCellMeta(0, 0).someValue).toEqual([2, 0]);
+      expect(getCellMeta(1, 0).someValue).toEqual([0, 0]);
+    });
+  });
+
+  describe('cell metadata', () => {
+    it('should correctly be removed when sorted rows are removed asc', () => {
+      handsontable({
+        data: [
+          ['c1'],
+          ['f1'],
+          ['d1'],
+          ['b1'],
+          ['a1'],
+          ['e1']
+        ],
+        columnSorting: true
+      });
+
+      getCellMeta(0, 0).someValue = [0, 0];
+      getCellMeta(1, 0).someValue = [1, 0];
+      getCellMeta(2, 0).someValue = [2, 0];
+      getCellMeta(3, 0).someValue = [3, 0];
+      getCellMeta(4, 0).someValue = [4, 0];
+      getCellMeta(5, 0).someValue = [5, 0];
+
+      getPlugin('columnSorting').sort({ column: 0, sortOrder: 'asc' });
+      // a1: [4, 0]
+      // b1: [3, 0]
+      // c1: [0, 0]
+      // d1: [2, 0]
+      // e1: [5, 0]
+      // f1: [1, 0]
+
+      alter('remove_row', [[1, 2], [4, 1]]);
+
+      expect(countRows()).toEqual(3);
+      expect(getCellMeta(0, 0).someValue).toEqual([4, 0]);
+      expect(getCellMeta(1, 0).someValue).toEqual([2, 0]);
+      expect(getCellMeta(2, 0).someValue).toEqual([1, 0]);
+    });
+  });
+
+  describe('cell metadata', () => {
+    it('should correctly be removed when sorted rows are removed desc', () => {
+      handsontable({
+        data: [
+          ['c1'],
+          ['f1'],
+          ['d1'],
+          ['b1'],
+          ['a1'],
+          ['e1']
+        ],
+        columnSorting: true
+      });
+
+      getCellMeta(0, 0).someValue = [0, 0];
+      getCellMeta(1, 0).someValue = [1, 0];
+      getCellMeta(2, 0).someValue = [2, 0];
+      getCellMeta(3, 0).someValue = [3, 0];
+      getCellMeta(4, 0).someValue = [4, 0];
+      getCellMeta(5, 0).someValue = [5, 0];
+
+      getPlugin('columnSorting').sort({ column: 0, sortOrder: 'asc' });
+      // a1: [4, 0]
+      // b1: [3, 0]
+      // c1: [0, 0]
+      // d1: [2, 0]
+      // e1: [5, 0]
+      // f1: [1, 0]
+
+      alter('remove_row', [[4, 1], [1, 2]]);
+
+      expect(countRows()).toEqual(3);
+      expect(getCellMeta(0, 0).someValue).toEqual([4, 0]);
+      expect(getCellMeta(1, 0).someValue).toEqual([2, 0]);
+      expect(getCellMeta(2, 0).someValue).toEqual([1, 0]);
+    });
+  });
+
   // TODO: Remove tests when workaround will be removed.
   describe('workaround regression check', () => {
     it('should not break the dataset when inserted new row', () => {
