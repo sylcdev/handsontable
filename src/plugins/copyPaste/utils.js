@@ -61,7 +61,9 @@ export function tableToArray(element) {
 
   if (typeof checkElement === 'string') {
     const tempElem = document.createElement('div');
-    tempElem.innerHTML = checkElement.replace(/\n/g, '');
+    tempElem.innerHTML = checkElement.replace(
+      /( {2}<td .*>)([\S\s]+?)(<\/td>)/g, // eslint-disable-next-line no-unused-vars
+      (_, p1, p2, p3, __, ___) => `${p1}${p2.replace(/(\r\n|\r|\n) {2}/g, ' ')}${p3}`);
     checkElement = tempElem.querySelector('table');
   }
 
@@ -77,7 +79,7 @@ export function tableToArray(element) {
 
       for (let column = 0; column < cellsLen; column += 1) {
         const cell = cells[column];
-        cell.innerHTML = cell.innerHTML.trim().replace(/<br(.|)>(\n?)/, '\n');
+        cell.innerHTML = cell.innerHTML.trim().replace(/<br[ ]?>(\r\n|\r|\n) {4}/g, '\n');
         const cellText = cell.innerText;
 
         newRow.push(cellText);
