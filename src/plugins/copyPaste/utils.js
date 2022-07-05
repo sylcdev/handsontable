@@ -79,7 +79,7 @@ export function tableToArray(element) {
 
       for (let column = 0; column < cellsLen; column += 1) {
         const cell = cells[column];
-        cell.innerHTML = cell.innerHTML.trim().replace(/<br[ ]?>(\r\n|\r|\n) {4}/g, '\n');
+        cell.innerHTML = cell.innerHTML.trim().replace(/<br ?\/?>(\r\n|\r|\n) {4}/g, '\n');
         const cellText = cell.innerText;
 
         newRow.push(cellText);

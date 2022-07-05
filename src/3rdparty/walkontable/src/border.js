@@ -461,6 +461,7 @@ class Border {
     } else {
       this.cornerStyle.top = `${top + height - 4}px`;
       this.cornerStyle.left = `${left + width - 4}px`;
+      this.cornerStyle.borderBottomWidth = this.cornerDefaultStyle.borderWidth;
       this.cornerStyle.borderRightWidth = this.cornerDefaultStyle.borderWidth;
       this.cornerStyle.width = this.cornerDefaultStyle.width;
 
